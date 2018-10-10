@@ -1,18 +1,26 @@
 package dsa.eetac.upc.edu.calculator;
 
+import android.renderscript.Sampler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
+
+import static java.lang.Math.sin;
 
 public class MainActivity extends AppCompatActivity {
     Button button0, button1, button2, button3, button4, button5, button6,
             button7, button8, button9, buttonAdd, buttonSub, buttonDivision,
-            buttonMulti, buttonClear, buttonEqual, buttonDot;
+            buttonMulti, buttonClear, buttonEqual, buttonDot, buttonSin, buttonCos, buttonTan, buttonUnits;
     EditText editText;
     float ValueOne, ValueTwo;
-    boolean Addition, mSubtract, Multiplication, Division;
+    boolean Addition, mSubtract, Multiplication, Division, Units = false;
+    double rad;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +43,13 @@ public class MainActivity extends AppCompatActivity {
         buttonClear = (Button) findViewById(R.id.btn_clear);
         buttonEqual = (Button) findViewById(R.id.btn_equals);
         buttonDot = (Button) findViewById(R.id.btn_dot);
+        buttonSin = (Button) findViewById(R.id.btn_sin);
+        buttonCos = (Button) findViewById(R.id.btn_cos);
+        buttonTan = (Button) findViewById(R.id.btn_tan);
+        buttonUnits = (Button) findViewById(R.id.btn_units);
         editText = (EditText) findViewById(R.id.editText);
+        buttonUnits.setText("Degrees");
+
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +117,19 @@ public class MainActivity extends AppCompatActivity {
                 editText.setText(editText.getText() + "0");
             }
         });
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (editText == null) {
+                    editText.setText("");
+                } else {
+                    ValueOne = Float.parseFloat(editText.getText() + "");
+                    Addition = true;
+                    editText.setText(null);
+                }
+            }
+        });
         buttonSub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,16 +156,60 @@ public class MainActivity extends AppCompatActivity {
                 editText.setText(null);
             }
         });
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
+        buttonSin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (editText == null) {
-                    editText.setText("");
-                } else {
+                if(Units == false){
                     ValueOne = Float.parseFloat(editText.getText() + "");
-                    Addition = true;
-                    editText.setText(null);
+                    rad = Math.toRadians(ValueOne);
+                }
+                else if(Units == true){
+                    rad = Double.parseDouble(editText.getText()+"");
+                }
+                float res = Float.parseFloat(Math.sin(rad) +"");
+                editText.setText(res+"");
+            }
+        });
+        buttonCos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Units == false){
+                    ValueOne = Float.parseFloat(editText.getText() + "");
+                    rad = Math.toRadians(ValueOne);
+                }
+                else if(Units == true){
+                    rad = Double.parseDouble(editText.getText()+"");
+                }
+
+                float res = Float.parseFloat(Math.cos(rad) +"");
+                editText.setText(res+"");
+            }
+        });
+        buttonTan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Units == false){
+                    ValueOne = Float.parseFloat(editText.getText() + "");
+                    rad = Math.toRadians(ValueOne);
+                }
+                else if(Units == true){
+                    rad = Double.parseDouble(editText.getText()+"");
+                }
+
+                float res = Float.parseFloat(Math.tan(rad) +"");
+                editText.setText(res+"");
+            }
+        });
+        buttonUnits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Units == false){
+                    buttonUnits.setText("Radiants");
+                    Units = true;
+                }
+                else{
+                    buttonUnits.setText("Degree");
+                    Units = false;
                 }
             }
         });
